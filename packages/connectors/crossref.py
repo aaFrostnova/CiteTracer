@@ -64,7 +64,11 @@ class CrossrefConnector(BaseConnector):
 
         publisher = str(item.get("publisher", "") or "")
         volume = str(item.get("volume", "") or "")
-        pages = str(item.get("page", "") or "")
+        # Modern biomedical journals publish e-locators / article numbers, which
+        # CrossRef stores under "article-number" rather than "page". Falling back
+        # keeps `pages` populated for those records instead of returning "" (which
+        # made the field look unverifiable downstream).
+        pages = str(item.get("page", "") or item.get("article-number", "") or "")
         return {
             "title": title,
             "authors": authors,

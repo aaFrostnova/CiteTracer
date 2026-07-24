@@ -1198,7 +1198,11 @@ def phase0_url_check(citation: CitationRecord) -> tuple[str, list[str], str, lis
             resolved_year = resolved.get("year")
             if citation.year and resolved_year:
                 try:
-                    if int(citation.year) != int(resolved_year):
+                    # Publisher landing pages advertise the online-first date while
+                    # citations use the issue year, so a +/-1 delta is a formatting
+                    # artifact, not evidence of a different paper. Only flag H4 when
+                    # the gap is >= 2 years.
+                    if abs(int(citation.year) - int(resolved_year)) >= 2:
                         issues.append("H4")
                 except (TypeError, ValueError):
                     pass
@@ -1534,6 +1538,19 @@ def phase0_decide_verdict(
         is_academic = False
 
     if is_academic:
+        # A "mismatch" verdict is only trustworthy when the scraped record carries
+        # real corroborating metadata. Landing pages often yield just a title plus
+        # an online-first date, which is too thin to declare "different paper";
+        # those cases fall through to the normal pipeline instead of hard-failing.
+        if url_match_status == "mismatch":
+            _best_corroboration = 0
+            for _rec in (fetched_records or []):
+                _best_corroboration = max(_best_corroboration, sum(
+                    1 for _f in ("authors", "venue", "volume", "pages")
+                    if (_rec or {}).get(_f)
+                ))
+            if _best_corroboration < 2:
+                return None
         # Academic URL: mismatch or not_found → FAKE H5 (identifier inconsistency)
         taxonomy = ["H5"]
         if url_match_status == "mismatch":
@@ -2456,18 +2473,34 @@ def cascading_phase2_only(
         _sc_status(f) in _MATCH_EQ + ("candidate_missing",)
         for f in _p3_peri_fields
     )
-    _p3_has_peri_cm = any(
-        _sc_status(f) == "candidate_missing" for f in _p3_peri_fields
-    )
+    def _peri_corroborated(field: str) -> bool:
+        """True if some OTHER candidate already verified this peripheral field.
+
+        The best candidate is chosen by an unweighted match count, so a connector
+        that omits a peripheral field can win over one that supplies it. Without
+        this check the P3 reason ("not verifiable by any candidate") can be false:
+        a sibling candidate held a matching value. A fabricated peripheral cannot
+        be corroborated by definition, so genuine P3 citations are unaffected.
+        """
+        for _r in all_valid_results:
+            if _r is best or not getattr(_r, "field_result", None):
+                continue
+            _fs = (_r.field_result.field_status or {}).get(field) or {}
+            if _fs.get("status") == "match":
+                return True
+        return False
+
+    missing_peri = [
+        f for f in _p3_peri_fields
+        if _sc_status(f) == "candidate_missing" and not _peri_corroborated(f)
+    ]
+    _p3_has_peri_cm = bool(missing_peri)
     if (
         _sc_authors_effectively_match
         and _p3_non_peri_match_eq
         and _p3_peri_clean
         and _p3_has_peri_cm
     ):
-        missing_peri = [
-            f for f in _p3_peri_fields if _sc_status(f) == "candidate_missing"
-        ]
         all_evaluations.append({
             "agent": "P3_short_circuit",
             "verdict": "POTENTIAL",

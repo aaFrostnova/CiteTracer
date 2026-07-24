@@ -591,6 +591,71 @@ class BedrockFieldClassifier:
     def _canon(s: str) -> str:
         return " ".join(str(s or "").strip().lower().split())
 
+    @staticmethod
+    def _name_parts(name: str) -> tuple[list[str], str]:
+        """(given tokens, surname) with accents and periods stripped."""
+        import unicodedata
+        s = "".join(c for c in unicodedata.normalize("NFD", str(name or ""))
+                    if unicodedata.category(c) != "Mn")
+        s = " ".join(s.replace(".", " ").split())
+        t = [x for x in s.split(" ") if x]
+        if not t:
+            return [], ""
+        # NLM style puts the surname first and a concatenated initials block last
+        # ("ElSayed NA", "Kombe Kombe AJ"): the trailing all-caps block is the
+        # given-name initials, everything before it is the surname.
+        if len(t) >= 2 and 1 <= len(t[-1]) <= 3 and t[-1].isupper() and t[-1].isalpha():
+            return list(t[-1]), " ".join(t[:-1]).lower()
+        return t[:-1], t[-1].lower()
+
+    @staticmethod
+    def _expand_initial_blocks(given: list[str]) -> list[str]:
+        """'NA' -> ['N','A'] for NLM-style concatenated initials; else unchanged."""
+        out: list[str] = []
+        for g in given:
+            if 1 < len(g) <= 3 and g.isupper() and g.isalpha():
+                out += list(g)
+            else:
+                out.append(g)
+        return out
+
+    @classmethod
+    def _initials_equivalent(
+        cls, citation_authors: list[str], candidate_authors: list[str],
+    ) -> str | None:
+        """'exact' / 'r2_initial' when every aligned pair differs only by initials
+        formatting; None when any pair is ambiguous (so the LLM still decides)."""
+        def pair_ok(a: str, b: str) -> bool:
+            if a.lower() == b.lower():
+                return True
+            if len(a) == 1 and len(b) > 1 and a.upper() == b[0].upper():
+                return True
+            if len(b) == 1 and len(a) > 1 and b.upper() == a[0].upper():
+                return True
+            return False  # multi-letter truncation stays ambiguous
+
+        # Lists must be the same length. Comparing only the aligned prefix would
+        # silently mask an author added or removed at the tail (H2), so any length
+        # difference is left to the LLM / existing truncation handling.
+        if not citation_authors or len(citation_authors) != len(candidate_authors):
+            return None
+        n = len(citation_authors)
+        saw_expansion = False
+        for i in range(n):
+            ga, sa = cls._name_parts(citation_authors[i])
+            gb, sb = cls._name_parts(candidate_authors[i])
+            if not sa or sa != sb:
+                return None
+            ga, gb = cls._expand_initial_blocks(ga), cls._expand_initial_blocks(gb)
+            if len(ga) != len(gb):
+                return None  # middle-name add/drop: leave to existing semantics
+            for x, y in zip(ga, gb):
+                if not pair_ok(x, y):
+                    return None
+                if x.lower() != y.lower():
+                    saw_expansion = True
+        return "r2_initial" if saw_expansion else "exact"
+
     def _fast_authors(
         self, citation_authors: list[str], candidate_authors: list[str],
     ) -> AuthorVariantResult | None:
@@ -601,6 +666,21 @@ class BedrockFieldClassifier:
         da = [self._canon(x) for x in (candidate_authors or [])]
         if ca and ca == da:
             return AuthorVariantResult(overall="exact", reason="byte-identical after normalization")
+        # Initials-convention fast path. Covers ONLY unambiguous formatting deltas:
+        #   1. initials punctuation ("Anne F Peery" vs "Anne F. Peery")
+        #   2. single-letter <-> full-word expansion ("M. Biton" vs "Moshe Biton")
+        #   3. NLM concatenated initials block ("ElSayed NA" vs "Nuha A ElSayed")
+        # Multi-letter truncation ("Ty" vs "Tyler") and middle-name add/drop are
+        # deliberately NOT accepted here: those stay p1_variant, preserving the
+        # existing taxonomy semantics.
+        if citation_authors and candidate_authors:
+            _v = self._initials_equivalent(citation_authors, candidate_authors)
+            if _v:
+                return AuthorVariantResult(
+                    overall=_v,
+                    reason=("Same people; difference is initials formatting only "
+                            "(punctuation, initial expansion, or NLM initials block)."),
+                )
         # Truncation marker: strip last + match prefix
         if citation_authors and self._is_truncation_marker(citation_authors[-1]):
             listed_canon = [self._canon(a) for a in citation_authors[:-1]]
@@ -686,7 +766,10 @@ class BedrockFieldClassifier:
             candidate_publisher=candidate_publisher or "",
         )
         try:
-            parsed = _call_bedrock(self.client, self.model_id, prompt)
+            # Long biomedical author lists overrun the default budget; a truncated
+            # response has no closing brace, so _call_bedrock returns {} silently
+            # and every field defaults to p1_variant. Give the classifier room.
+            parsed = _call_bedrock(self.client, self.model_id, prompt, max_tokens=2048)
         except Exception:
             # LLM failure → conservative fallback (preserve whatever fast
             # paths resolved, use p1_variant / different for the unresolved).
