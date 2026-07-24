@@ -19031,11 +19031,12 @@
   "subtype": "H6",
   "label": "HALLUCINATED",
   "category": "Peripheral",
-  "mutation_type": "location_fabrication",
+  "mutation_type": "pages_volume_fabrication",
   "changed_fields": [
-   "location"
+   "pages",
+   "volume"
   ],
-  "explanation": "Location fabricated: \"\" → \"Amsterdam, Netherlands\" for a 2023 Molecular psychiatry paper (verifiable against source).",
+  "explanation": "Pages: \"1902-1918\" -> \"300-340\"; Volume: \"28\" -> \"52\" for a 2023 Molecular psychiatry paper. Both fields are indexed by CrossRef/PubMed/Europe PMC, so the error is verifiable against a source.",
   "seed": {
    "title": "Cognitive impairment in schizophrenia: aetiology, pathophysiology, and treatment",
    "authors": [
@@ -19052,7 +19053,7 @@
    "volume": "28",
    "pages": "1902-1918",
    "publisher": "",
-   "location": "Amsterdam, Netherlands",
+   "location": "",
    "_source": "europepmc",
    "_query_topic": "major depressive disorder",
    "_query_venue": "Mol Psychiatry",
@@ -19118,11 +19119,12 @@
   "subtype": "H6",
   "label": "HALLUCINATED",
   "category": "Peripheral",
-  "mutation_type": "location_fabrication",
+  "mutation_type": "pages_volume_fabrication",
   "changed_fields": [
-   "location"
+   "pages",
+   "volume"
   ],
-  "explanation": "Location fabricated: \"\" → \"Boston, MA\" for a 2023 The New England journal of medicine paper (verifiable against source).",
+  "explanation": "Pages: \"1272-1283\" -> \"147-572\"; Volume: \"388\" -> \"22\" for a 2023 The New England journal of medicine paper. Both fields are indexed by CrossRef/PubMed/Europe PMC, so the error is verifiable against a source.",
   "seed": {
    "title": "Trial of Endovascular Therapy for Acute Ischemic Stroke with Large Infarct",
    "authors": [
@@ -19194,7 +19196,7 @@
    "volume": "388",
    "pages": "1272-1283",
    "publisher": "",
-   "location": "Boston, MA",
+   "location": "",
    "_source": "europepmc",
    "_query_topic": "ischemic stroke",
    "_query_venue": "N Engl J Med",
@@ -19314,11 +19316,12 @@
   "subtype": "H6",
   "label": "HALLUCINATED",
   "category": "Peripheral",
-  "mutation_type": "location_fabrication",
+  "mutation_type": "pages_volume_fabrication",
   "changed_fields": [
-   "location"
+   "pages",
+   "volume"
   ],
-  "explanation": "Location fabricated: \"\" → \"Amsterdam, Netherlands\" for a 2019 JAMA paper (verifiable against source).",
+  "explanation": "Pages: \"1294-1304\" -> \"48-459\"; Volume: \"322\" -> \"85\" for a 2019 JAMA paper. Both fields are indexed by CrossRef/PubMed/Europe PMC, so the error is verifiable against a source.",
   "seed": {
    "title": "Chronic Kidney Disease Diagnosis and Management: A Review",
    "authors": [
@@ -19335,7 +19338,7 @@
    "volume": "322",
    "pages": "1294-1304",
    "publisher": "",
-   "location": "Amsterdam, Netherlands",
+   "location": "",
    "_source": "europepmc",
    "_query_topic": "multiple sclerosis",
    "_query_venue": "JAMA",
@@ -19789,7 +19792,7 @@
   "changed_fields": [
    "publisher"
   ],
-  "explanation": "Publisher fabricated: \"\" → \"Springer Nature\" for a 2024 Nature paper (verifiable against source).",
+  "explanation": "Publisher fabricated: \"\" -> \"Karger\" (true publisher is \"Springer Science and Business Media LLC\") for a 2024 Nature paper (verifiable against source).",
   "seed": {
    "title": "APOE4/4 is linked to damaging lipid droplets in Alzheimer's disease microglia",
    "authors": [
@@ -19916,7 +19919,7 @@
   "changed_fields": [
    "publisher"
   ],
-  "explanation": "Publisher fabricated: \"\" → \"Springer Nature\" for a 2022 Nature paper (verifiable against source).",
+  "explanation": "Publisher fabricated: \"\" -> \"Karger\" (true publisher is \"Springer Science and Business Media LLC\") for a 2022 Nature paper (verifiable against source).",
   "seed": {
    "title": "The cGAS-STING pathway drives type I IFN immunopathology in COVID-19",
    "authors": [
@@ -20135,11 +20138,12 @@
   "subtype": "H6",
   "label": "HALLUCINATED",
   "category": "Peripheral",
-  "mutation_type": "location_fabrication",
+  "mutation_type": "pages_volume_fabrication",
   "changed_fields": [
-   "location"
+   "pages",
+   "volume"
   ],
-  "explanation": "Location fabricated: \"\" → \"Basel, Switzerland\" for a 2019 Nature reviews. Disease primers paper (verifiable against source).",
+  "explanation": "Pages: \"9\" -> \"228-398\"; Volume: \"5\" -> \"26\" for a 2019 Nature reviews. Disease primers paper. Both fields are indexed by CrossRef/PubMed/Europe PMC, so the error is verifiable against a source.",
   "seed": {
    "title": "Kaposi sarcoma",
    "authors": [
@@ -20159,7 +20163,7 @@
    "volume": "5",
    "pages": "9",
    "publisher": "",
-   "location": "Basel, Switzerland",
+   "location": "",
    "_source": "europepmc",
    "_query_topic": "HIV latency",
    "_query_venue": "Nat Rev Dis Primers",
@@ -20206,11 +20210,12 @@
   "subtype": "H6",
   "label": "HALLUCINATED",
   "category": "Peripheral",
-  "mutation_type": "location_fabrication",
+  "mutation_type": "pages_volume_fabrication",
   "changed_fields": [
-   "location"
+   "pages",
+   "volume"
   ],
-  "explanation": "Location fabricated: \"\" → \"Basel, Switzerland\" for a 2019 Cell paper (verifiable against source).",
+  "explanation": "Pages: \"829-845.e20\" -> \"51-572\"; Volume: \"179\" -> \"34\" for a 2019 Cell paper. Both fields are indexed by CrossRef/PubMed/Europe PMC, so the error is verifiable against a source.",
   "seed": {
    "title": "Landscape and Dynamics of Single Immune Cells in Hepatocellular Carcinoma",
    "authors": [
@@ -20249,7 +20254,7 @@
    "volume": "179",
    "pages": "829-845.e20",
    "publisher": "",
-   "location": "Basel, Switzerland",
+   "location": "",
    "_source": "europepmc",
    "_query_topic": "hepatocellular carcinoma",
    "_query_venue": "Cell",
@@ -20292,11 +20297,12 @@
   "subtype": "H6",
   "label": "HALLUCINATED",
   "category": "Peripheral",
-  "mutation_type": "location_fabrication",
+  "mutation_type": "pages_volume_fabrication",
   "changed_fields": [
-   "location"
+   "pages",
+   "volume"
   ],
-  "explanation": "Location fabricated: \"\" → \"Basel, Switzerland\" for a 2020 Nature reviews. Molecular cell biology paper (verifiable against source).",
+  "explanation": "Pages: \"421-438\" -> \"243-554\"; Volume: \"21\" -> \"46\" for a 2020 Nature reviews. Molecular cell biology paper. Both fields are indexed by CrossRef/PubMed/Europe PMC, so the error is verifiable against a source.",
   "seed": {
    "title": "Mechanisms, regulation and functions of the unfolded protein response",
    "authors": [
@@ -20314,7 +20320,7 @@
    "volume": "21",
    "pages": "421-438",
    "publisher": "",
-   "location": "Basel, Switzerland",
+   "location": "",
    "_source": "europepmc",
    "_query_topic": "Alzheimer disease",
    "_query_venue": "Nat Rev Mol Cell Biol",
@@ -20325,11 +20331,12 @@
   "subtype": "H6",
   "label": "HALLUCINATED",
   "category": "Peripheral",
-  "mutation_type": "location_fabrication",
+  "mutation_type": "pages_volume_fabrication",
   "changed_fields": [
-   "location"
+   "pages",
+   "volume"
   ],
-  "explanation": "Location fabricated: \"\" → \"Basel, Switzerland\" for a 2022 Nature reviews. Drug discovery paper (verifiable against source).",
+  "explanation": "Pages: \"339-358\" -> \"2-483\"; Volume: \"21\" -> \"76\" for a 2022 Nature reviews. Drug discovery paper. Both fields are indexed by CrossRef/PubMed/Europe PMC, so the error is verifiable against a source.",
   "seed": {
    "title": "Function and therapeutic value of astrocytes in neurological diseases",
    "authors": [
@@ -20346,7 +20353,7 @@
    "volume": "21",
    "pages": "339-358",
    "publisher": "",
-   "location": "Basel, Switzerland",
+   "location": "",
    "_source": "europepmc",
    "_query_topic": "Parkinson disease",
    "_query_venue": "Nat Rev Drug Discov",
@@ -20587,11 +20594,12 @@
   "subtype": "H6",
   "label": "HALLUCINATED",
   "category": "Peripheral",
-  "mutation_type": "location_fabrication",
+  "mutation_type": "pages_volume_fabrication",
   "changed_fields": [
-   "location"
+   "pages",
+   "volume"
   ],
-  "explanation": "Location fabricated: \"\" → \"Amsterdam, Netherlands\" for a 2020 Ophthalmology paper (verifiable against source).",
+  "explanation": "Pages: \"P66-P145\" -> \"47-585\"; Volume: \"127\" -> \"82\" for a 2020 Ophthalmology paper. Both fields are indexed by CrossRef/PubMed/Europe PMC, so the error is verifiable against a source.",
   "seed": {
    "title": "Diabetic Retinopathy Preferred Practice Pattern®",
    "authors": [
@@ -20612,7 +20620,7 @@
    "volume": "127",
    "pages": "P66-P145",
    "publisher": "",
-   "location": "Amsterdam, Netherlands",
+   "location": "",
    "_source": "europepmc",
    "_query_topic": "diabetic retinopathy",
    "_query_venue": "Ophthalmology",
@@ -20627,7 +20635,7 @@
   "changed_fields": [
    "publisher"
   ],
-  "explanation": "Publisher fabricated: \"\" → \"Elsevier\" for a 2019 EBioMedicine paper (verifiable against source).",
+  "explanation": "Publisher fabricated: \"\" -> \"Taylor & Francis\" (true publisher is \"Elsevier BV\") for a 2019 EBioMedicine paper (verifiable against source).",
   "seed": {
    "title": "Senolytics decrease senescent cells in humans: Preliminary report from a clinical trial of Dasatinib plus Quercetin in individuals with diabetic kidney disease",
    "authors": [
@@ -20882,7 +20890,7 @@
   "changed_fields": [
    "publisher"
   ],
-  "explanation": "Publisher fabricated: \"\" → \"Elsevier\" for a 2022 Immunity paper (verifiable against source).",
+  "explanation": "Publisher fabricated: \"\" -> \"Wiley\" (true publisher is \"Elsevier BV\") for a 2022 Immunity paper (verifiable against source).",
   "seed": {
    "title": "Inflammation in obesity, diabetes, and related disorders",
    "authors": [
@@ -20991,11 +20999,12 @@
   "subtype": "H6",
   "label": "HALLUCINATED",
   "category": "Peripheral",
-  "mutation_type": "location_fabrication",
+  "mutation_type": "pages_volume_fabrication",
   "changed_fields": [
-   "location"
+   "pages",
+   "volume"
   ],
-  "explanation": "Location fabricated: \"\" → \"Basel, Switzerland\" for a 2021 MedComm paper (verifiable against source).",
+  "explanation": "Pages: \"618-653\" -> \"45-364\"; Volume: \"2\" -> \"12\" for a 2021 MedComm paper. Both fields are indexed by CrossRef/PubMed/Europe PMC, so the error is verifiable against a source.",
   "seed": {
    "title": "NF-κB signaling in inflammation and cancer",
    "authors": [
@@ -21014,7 +21023,7 @@
    "volume": "2",
    "pages": "618-653",
    "publisher": "",
-   "location": "Basel, Switzerland",
+   "location": "",
    "_source": "europepmc",
    "_query_topic": "psoriasis immunology",
    "_query_venue": "MedComm (2020)",
@@ -21025,11 +21034,12 @@
   "subtype": "H6",
   "label": "HALLUCINATED",
   "category": "Peripheral",
-  "mutation_type": "location_fabrication",
+  "mutation_type": "pages_volume_fabrication",
   "changed_fields": [
-   "location"
+   "pages",
+   "volume"
   ],
-  "explanation": "Location fabricated: \"\" → \"Basel, Switzerland\" for a 2023 Nature medicine paper (verifiable against source).",
+  "explanation": "Pages: \"2259-2267\" -> \"226-418\"; Volume: \"29\" -> \"23\" for a 2023 Nature medicine paper. Both fields are indexed by CrossRef/PubMed/Europe PMC, so the error is verifiable against a source.",
   "seed": {
    "title": "Elranatamab in relapsed or refractory multiple myeloma: phase 2 MagnetisMM-3 trial results",
    "authors": [
@@ -21073,7 +21083,7 @@
    "volume": "29",
    "pages": "2259-2267",
    "publisher": "",
-   "location": "Basel, Switzerland",
+   "location": "",
    "_source": "europepmc",
    "_query_topic": "SARS-CoV-2 vaccine",
    "_query_venue": "Nat Med",
@@ -21335,11 +21345,12 @@
   "subtype": "H6",
   "label": "HALLUCINATED",
   "category": "Peripheral",
-  "mutation_type": "location_fabrication",
+  "mutation_type": "pages_volume_fabrication",
   "changed_fields": [
-   "location"
+   "pages",
+   "volume"
   ],
-  "explanation": "Location fabricated: \"\" → \"Amsterdam, Netherlands\" for a 2023 Nature reviews. Drug discovery paper (verifiable against source).",
+  "explanation": "Pages: \"449-475\" -> \"154-409\"; Volume: \"22\" -> \"28\" for a 2023 Nature reviews. Drug discovery paper. Both fields are indexed by CrossRef/PubMed/Europe PMC, so the error is verifiable against a source.",
   "seed": {
    "title": "Therapeutic strategies for COVID-19: progress and lessons learned",
    "authors": [
@@ -21357,7 +21368,7 @@
    "volume": "22",
    "pages": "449-475",
    "publisher": "",
-   "location": "Amsterdam, Netherlands",
+   "location": "",
    "_source": "europepmc",
    "_query_topic": "colorectal cancer screening",
    "_query_venue": "Nat Rev Drug Discov",
@@ -21368,11 +21379,12 @@
   "subtype": "H6",
   "label": "HALLUCINATED",
   "category": "Peripheral",
-  "mutation_type": "location_fabrication",
+  "mutation_type": "pages_volume_fabrication",
   "changed_fields": [
-   "location"
+   "pages",
+   "volume"
   ],
-  "explanation": "Location fabricated: \"\" → \"Boston, MA\" for a 2019 European urology paper (verifiable against source).",
+  "explanation": "Pages: \"74-84\" -> \"275-341\"; Volume: \"75\" -> \"40\" for a 2019 European urology paper. Both fields are indexed by CrossRef/PubMed/Europe PMC, so the error is verifiable against a source.",
   "seed": {
    "title": "Epidemiology of Renal Cell Carcinoma",
    "authors": [
@@ -21396,7 +21408,7 @@
    "volume": "75",
    "pages": "74-84",
    "publisher": "",
-   "location": "Boston, MA",
+   "location": "",
    "_source": "europepmc",
    "_query_topic": "colorectal cancer screening",
    "_query_venue": "Eur Urol",
@@ -21623,11 +21635,12 @@
   "subtype": "H6",
   "label": "HALLUCINATED",
   "category": "Peripheral",
-  "mutation_type": "location_fabrication",
+  "mutation_type": "pages_volume_fabrication",
   "changed_fields": [
-   "location"
+   "pages",
+   "volume"
   ],
-  "explanation": "Location fabricated: \"\" → \"Amsterdam, Netherlands\" for a 2022 The New England journal of medicine paper (verifiable against source).",
+  "explanation": "Pages: \"1532-1546\" -> \"91-598\"; Volume: \"386\" -> \"92\" for a 2022 The New England journal of medicine paper. Both fields are indexed by CrossRef/PubMed/Europe PMC, so the error is verifiable against a source.",
   "seed": {
    "title": "Covid-19 Vaccine Effectiveness against the Omicron (B.1.1.529) Variant",
    "authors": [
@@ -21672,7 +21685,7 @@
    "volume": "386",
    "pages": "1532-1546",
    "publisher": "",
-   "location": "Amsterdam, Netherlands",
+   "location": "",
    "_source": "europepmc",
    "_query_topic": "SARS-CoV-2 vaccine",
    "_query_venue": "N Engl J Med",
@@ -21683,11 +21696,12 @@
   "subtype": "H6",
   "label": "HALLUCINATED",
   "category": "Peripheral",
-  "mutation_type": "location_fabrication",
+  "mutation_type": "pages_volume_fabrication",
   "changed_fields": [
-   "location"
+   "pages",
+   "volume"
   ],
-  "explanation": "Location fabricated: \"\" → \"London, UK\" for a 2021 JAMA pediatrics paper (verifiable against source).",
+  "explanation": "Pages: \"817-826\" -> \"38-563\"; Volume: \"175\" -> \"28\" for a 2021 JAMA pediatrics paper. Both fields are indexed by CrossRef/PubMed/Europe PMC, so the error is verifiable against a source.",
   "seed": {
    "title": "Maternal and Neonatal Morbidity and Mortality Among Pregnant Women With and Without COVID-19 Infection: The INTERCOVID Multinational Cohort Study",
    "authors": [
@@ -21751,7 +21765,7 @@
    "volume": "175",
    "pages": "817-826",
    "publisher": "",
-   "location": "London, UK",
+   "location": "",
    "_source": "europepmc",
    "_query_topic": "sepsis mortality",
    "_query_venue": "JAMA Pediatr",
@@ -21957,28 +21971,27 @@
   "changed_fields": [
    "authors"
   ],
-  "explanation": "Author name variant: \"Aaron S Kelly\" → \"Aar Kelly\". 'Aar' is a plausible short form of 'Aaron'.",
+  "explanation": "Author name variant: \"Georg Petroianu\" -> \"Geo Petroianu\". 'Geo' is a plausible short form of 'Georg'. Seed verified: both Europe PMC and CrossRef return full given names for this paper, so the truncation is detectable rather than indistinguishable from NLM initials.",
   "seed": {
-   "title": "Obesity in children and adolescents: epidemiology, causes, assessment, and management",
+   "title": "Advanced Glycation End Products and Diabetes Mellitus: Mechanisms and Perspectives",
    "authors": [
-    "Hiba Jebeile",
-    "Aar Kelly",
-    "Grace O'Malley",
-    "Louise A Baur"
+    "Mariyam Khalid",
+    "Georg Petroianu",
+    "Abdu Adem"
    ],
-   "venue": "The lancet. Diabetes & endocrinology",
-   "venue_iso": "Lancet Diabetes Endocrinol",
+   "venue": "Biomolecules",
+   "venue_iso": "Biomolecules",
    "year": 2022,
-   "doi": "10.1016/s2213-8587(22)00047-x",
+   "doi": "10.3390/biom12040542",
    "arxiv_id": "",
-   "url": "https://doi.org/10.1016/s2213-8587(22)00047-x",
-   "volume": "10",
-   "pages": "351-365",
+   "url": "https://doi.org/10.3390/biom12040542",
+   "volume": "12",
+   "pages": "542",
    "publisher": "",
    "location": "",
    "_source": "europepmc",
-   "_query_topic": "gut microbiome",
-   "_query_venue": "Lancet Diabetes Endocrinol",
+   "_query_topic": "sepsis mortality",
+   "_query_venue": "Biomolecules",
    "_query_year": 2022
   }
  },
