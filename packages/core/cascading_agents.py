@@ -957,13 +957,29 @@ def select_best_candidate(valid_results: list[ValidAgentResult]) -> ValidAgentRe
     if not valid_results:
         return None
 
-    # Prefer: most matching fields, structured over web, potential over hallucinated
+    # Prefer: most matching fields, structured over web, potential over hallucinated.
+    # Two corrections to a plain match count:
+    #   * only fields the REFERENCE actually provides count, so a connector cannot
+    #     win by returning extras the citation never claimed;
+    #   * candidate_missing on a reference-provided field is penalised, so a record
+    #     that simply omits the decisive field cannot outrank one that carries it.
     def score(r: ValidAgentResult) -> tuple:
         fs = r.field_result.field_status if r.field_result else {}
-        match_count = sum(1 for v in fs.values() if isinstance(v, dict) and v.get("status") == "match")
+        match_count = 0
+        missing_penalty = 0
+        for v in fs.values():
+            if not isinstance(v, dict):
+                continue
+            status = v.get("status")
+            reference_has = bool(v.get("reference"))
+            if status == "match":
+                if reference_has:
+                    match_count += 1
+            elif status == "candidate_missing" and reference_has:
+                missing_penalty += 1
         is_structured = 1 if r.candidate and r.candidate.connector not in _WEB_CONNECTORS else 0
         is_potential = 1 if r.hint == "likely_potential" else 0
-        return (is_structured, match_count, is_potential)
+        return (is_structured, match_count - missing_penalty, is_potential)
 
     return max(valid_results, key=score)
 
@@ -2420,7 +2436,16 @@ def cascading_phase2_only(
     _p1_non_author_match_eq = all(
         _sc_status(f) in _MATCH_EQ for f in _p1_non_author_fields
     )
-    if _sc_author_variant == "p1_variant" and _p1_non_author_match_eq:
+    # An UNRESOLVED classification means the classifier never produced a verdict
+    # (truncated response); p1_variant is only its default. Short-circuiting on it
+    # turns a non-answer into a POTENTIAL verdict, so fall through to the agent
+    # chain instead and let a real judgement be made.
+    _sc_author_reason = ""
+    if isinstance(_sc_authors_entry, dict):
+        _sc_author_reason = str(_sc_authors_entry.get("author_variant_reason", "") or "")
+    _sc_author_unresolved = _sc_author_reason.startswith("UNRESOLVED")
+    if (_sc_author_variant == "p1_variant" and _p1_non_author_match_eq
+            and not _sc_author_unresolved):
         # Name the specific author(s) that flagged as p1_variant so
         # reviewers see which name(s) are unverifiable instead of a
         # generic "author name variant" message.

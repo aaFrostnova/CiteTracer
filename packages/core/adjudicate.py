@@ -211,6 +211,11 @@ def _norm_pages(value: Any) -> str:
     # Collapse whitespace around the hyphen so "12 - 22" ≡ "12-22".
     text = _re.sub(r"\s*-\s*", "-", text)
     text = text.strip(" .,:;")
+    # Biomedical e-locators: sources disagree on the "e" prefix for the same
+    # article ("e123158" in CrossRef/PubMed vs "123158" in Europe PMC). Drop a
+    # leading e before an all-digit locator so the two forms compare equal.
+    if _re.fullmatch(r"e\d+", text):
+        text = text[1:]
     # ACM article-number format: "766:1-766:28" → "1-28"
     # Pattern: <num>:<start> - <num>:<end>  (same article number on both sides)
     m = _re.match(r"^(\d+):(\d+)\s*-\s*(\d+):(\d+)$", text)
