@@ -53,6 +53,11 @@ def clean(rec: dict, topic: str, year: int) -> dict | None:
         fn, ln = a.get("firstName"), a.get("lastName")
         if fn and ln:
             authors.append(f"{fn} {ln}")
+        elif a.get("collectiveName"):
+            # Consortium/collective authors carry ONLY collectiveName. Dropping them
+            # made the rendered citation one author short of every index, which reads
+            # downstream as a fabricated author deletion.
+            authors.append(str(a["collectiveName"]).strip())
         elif a.get("fullName"):
             authors.append(a["fullName"])
     if len(authors) < 2:

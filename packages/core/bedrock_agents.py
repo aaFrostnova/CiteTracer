@@ -304,9 +304,19 @@ COUNT CHECK PROCEDURE:
   1. Strip truncation markers from the citation list ("et al.", "and others",
      "Others", "…"). If any marker is present, the citation is allowed to
      have fewer listed authors than the candidate — skip the count check.
-  2. Otherwise, if len(citation) != len(candidate) → **h2_error, count mismatch.**
-     Return immediately; do NOT try to explain the extra/missing author as a
-     name variant or initial expansion.
+  2. Drop COLLECTIVE / CORPORATE author rows from BOTH sides before counting.
+     These are consortium or working-group names, not people, and indexes
+     disagree wildly on whether to list them (and on how many members to
+     enumerate). Recognise them by the absence of a personal-name shape:
+     they contain words like "Group", "Consortium", "Investigators",
+     "Collaboration", "Collaborators", "Network", "Team", "Study",
+     "Committee", "Trial", "Authors", or are an ALL-CAPS acronym.
+     Examples: "IMbrave150 Investigators", "ESC Scientific Document Group",
+     "Darwin Tree of Life Consortium", "NGS-SA", "COMMIT-KZN Team".
+     A citation omitting such a row is NOT an author deletion.
+  3. Otherwise, if the remaining len(citation) != len(candidate) →
+     **h2_error, count mismatch.** Return immediately; do NOT try to explain
+     the extra/missing author as a name variant or initial expansion.
 
 COUNT EXAMPLES — ALL h2_error:
 
@@ -790,7 +800,11 @@ class BedrockFieldClassifier:
 
         def _parse_sub(raw: Any, allowed: set[str], fallback: str) -> tuple[str, str]:
             if not isinstance(raw, dict):
-                return fallback, ""
+                # No parseable verdict for this field (typically a response
+                # truncated at max_tokens on a long author list). Say so instead
+                # of silently defaulting, so downstream short-circuits can tell
+                # "the classifier judged this" from "the classifier never answered".
+                return fallback, "UNRESOLVED: classifier returned no parseable verdict"
             overall = str(raw.get("overall", fallback)).strip().lower()
             if overall not in allowed:
                 overall = fallback

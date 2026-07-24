@@ -30,10 +30,25 @@ class EuropePMCConnector(BaseConnector):
 
     @staticmethod
     def _normalize_item(item: dict[str, Any]) -> dict[str, Any]:
-        authors = []
-        author_string = str(item.get("authorString", "") or "").strip()
-        if author_string:
-            authors = [part.strip().rstrip(".") for part in author_string.split(",") if part.strip()]
+        # resultType=core returns BOTH an NLM-abbreviated "authorString"
+        # ("Basu M, Mahapatra E") and a structured "authorList" carrying full given
+        # names ("Mukta Basu") plus collectiveName rows for consortium authors.
+        # Prefer the structured list: the abbreviated form destroys the given-name
+        # evidence needed to tell a legitimate initial from a truncated name, and
+        # splitting it on commas silently turns a collective name into an author.
+        authors: list[str] = []
+        for a in ((item.get("authorList") or {}).get("author") or []):
+            first, last = (a.get("firstName") or "").strip(), (a.get("lastName") or "").strip()
+            if first and last:
+                authors.append(f"{first} {last}")
+            elif a.get("collectiveName"):
+                authors.append(str(a["collectiveName"]).strip())
+            elif a.get("fullName"):
+                authors.append(str(a["fullName"]).strip())
+        if not authors:
+            author_string = str(item.get("authorString", "") or "").strip()
+            if author_string:
+                authors = [p.strip().rstrip(".") for p in author_string.split(",") if p.strip()]
         doi = str(item.get("doi", "") or "").strip().lower()
         pmcid = str(item.get("pmcid", "") or "").strip()
         pmid = str(item.get("pmid", "") or "").strip()
@@ -47,7 +62,15 @@ class EuropePMCConnector(BaseConnector):
         return {
             "title": str(item.get("title", "") or ""),
             "authors": authors,
-            "venue": str(item.get("journalTitle", "") or ""),
+            # resultType=core carries the journal name under journalInfo.journal,
+            # not as a top-level "journalTitle" (that only exists for resultType=lite).
+            # Reading the wrong key left venue empty on every core-mode hit.
+            "venue": str(
+                item.get("journalTitle", "")
+                or (journal_info.get("journal") or {}).get("title", "")
+                or (journal_info.get("journal") or {}).get("isoabbreviation", "")
+                or ""
+            ),
             "year": _safe_int(item.get("pubYear")),
             "doi": doi,
             "arxiv_id": "",

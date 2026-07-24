@@ -23,26 +23,25 @@
   "citation_id": "P1-0001"
  },
  {
-  "title": "Obesity in children and adolescents: epidemiology, causes, assessment, and management",
+  "title": "Advanced Glycation End Products and Diabetes Mellitus: Mechanisms and Perspectives",
   "authors": [
-   "Hiba Jebeile",
-   "Aar Kelly",
-   "Grace O'Malley",
-   "Louise A Baur"
+   "Mariyam Khalid",
+   "Geo Petroianu",
+   "Abdu Adem"
   ],
-  "venue": "The lancet. Diabetes & endocrinology",
-  "venue_iso": "Lancet Diabetes Endocrinol",
+  "venue": "Biomolecules",
+  "venue_iso": "Biomolecules",
   "year": 2022,
-  "doi": "10.1016/s2213-8587(22)00047-x",
+  "doi": "10.3390/biom12040542",
   "arxiv_id": "",
-  "url": "https://doi.org/10.1016/s2213-8587(22)00047-x",
-  "volume": "10",
-  "pages": "351-365",
+  "url": "https://doi.org/10.3390/biom12040542",
+  "volume": "12",
+  "pages": "542",
   "publisher": "",
   "location": "",
   "_source": "europepmc",
-  "_query_topic": "gut microbiome",
-  "_query_venue": "Lancet Diabetes Endocrinol",
+  "_query_topic": "sepsis mortality",
+  "_query_venue": "Biomolecules",
   "_query_year": 2022,
   "citation_id": "P1-0002"
  },

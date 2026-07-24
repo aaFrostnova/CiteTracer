@@ -98,6 +98,46 @@ def _filter_websearch_records_by_title(
 # but is now back in the parallel pool).
 _DEMOTED_CONNECTOR_NAMES: set[str] = set()
 
+# Connectors that return full given names for a DOI-exact lookup, in priority
+# order. Used only to enrich initials-only candidates from other connectors.
+_AUTHORITY_CONNECTOR_NAMES = ("crossref", "europepmc")
+
+
+def _is_initials_token(given: str) -> bool:
+    """A given-name token that is just initials: 'Y', 'Y.', 'YB', 'Y.B.'."""
+    core = given.replace(".", "").replace("-", "").strip()
+    return bool(core) and len(core) <= 3 and core.isupper() and core.isalpha()
+
+
+_COLLECTIVE_MARKERS = (
+    "group", "consortium", "investigator", "collaboration", "collaborator",
+    "network", "team", "study", "committee", "trial", "authors", "society",
+)
+
+
+def _is_collective_row(name: str) -> bool:
+    low = str(name).lower()
+    return any(m in low for m in _COLLECTIVE_MARKERS)
+
+
+def _authors_initials_only(authors: list[str]) -> bool:
+    """True if EVERY personal author's given part is initials-only (NLM style).
+
+    'An Y' / 'Zheng Z' -> True; 'Yuanyuan An' / 'Yua An' -> False. Collective /
+    single-token rows are skipped rather than counted as personal names.
+    """
+    seen_personal = False
+    for a in authors or []:
+        parts = str(a).split()
+        if len(parts) < 2 or _is_collective_row(a):
+            continue  # collective or single-token row, not a person
+        seen_personal = True
+        # NLM writes "Family I" (initials last); western writes "Given Family".
+        first, last = parts[0], parts[-1]
+        if not (_is_initials_token(last) or _is_initials_token(first)):
+            return False
+    return seen_personal
+
 
 @dataclass
 class VerifyConfig:
@@ -324,6 +364,35 @@ class CitationVerifier:
         except Exception:
             return ""
 
+    def _doi_authority_authors(self, citation: CitationRecord) -> list[str] | None:
+        """Full-given-name author list from a DOI-exact authority connector.
+
+        Returns None unless the citation has a DOI and a crossref/europepmc
+        DOI-exact lookup yields authors that actually carry full given names
+        (so we never overwrite good initials with more initials). Runs once per
+        citation, before the streaming race, so the same authority is available
+        to every per-connector unit regardless of which one wins.
+        """
+        doi = (citation.doi or "").strip()
+        if not doi:
+            return None
+        by_name = {c.name: c for c in self.orchestrator.connectors}
+        for name in _AUTHORITY_CONNECTOR_NAMES:
+            conn = by_name.get(name)
+            if conn is None:
+                continue
+            try:
+                records = conn.search(citation, self.orchestrator.policy)
+            except Exception:
+                continue
+            for rec in records or []:
+                rec_doi = str(rec.get("doi", "") or "").strip().lower()
+                authors = rec.get("authors") or []
+                if rec_doi == doi.lower() and authors and \
+                        not _authors_initials_only(authors):
+                    return [str(a) for a in authors]
+        return None
+
     def _run_connector_unit(
         self,
         citation: CitationRecord,
@@ -333,6 +402,7 @@ class CitationVerifier:
         url_issues: list[str],
         url_type_triggered: str,
         tavily_api_key: str,
+        authority_authors: list[str] | None = None,
     ) -> dict[str, Any]:
         """Query one connector then verify its candidates (unit of parallelism).
 
@@ -396,6 +466,18 @@ class CitationVerifier:
             }
 
         cands = collect_candidates(citation, {conn_name: records})
+        # Full-given-name enrichment. Connectors such as PubMed return NLM-style
+        # initials ("An Y"), under which a legitimate initial ("Y. An") and a
+        # truncated name ("Yua An") are indistinguishable — the first VALID wins
+        # the streaming race and the full-name source never gets adjudicated.
+        # When a DOI-exact authority list is available, overwrite the authors of
+        # an initials-only same-paper candidate with the full names so the
+        # adjudicator can tell R2 from P1 inside this very unit.
+        if authority_authors and cands:
+            for cand in cands:
+                if _authors_initials_only(cand.authors) and \
+                        len(cand.authors) == len(authority_authors):
+                    cand.authors = list(authority_authors)
         evals: list[dict[str, Any]] = []
         vresults = []
 
@@ -461,6 +543,7 @@ class CitationVerifier:
           2.  Otherwise → cascading_phase2_only on accumulated candidates.
         """
         tavily_key = self._resolve_tavily_key()
+        authority_authors = self._doi_authority_authors(citation)
 
         all_candidates: list[CandidateMatch] = []
         all_evaluations: list[dict[str, Any]] = []
@@ -485,6 +568,7 @@ class CitationVerifier:
                 url_issues=url_issues,
                 url_type_triggered=url_type_triggered,
                 tavily_api_key=tavily_key,
+                authority_authors=authority_authors,
             )
             all_evidence.append(unit["trace"])
             if unit["kind"] == "VALID":
@@ -511,7 +595,7 @@ class CitationVerifier:
                     self._run_connector_unit,
                     citation, c, None,
                     url_match_status, url_issues, url_type_triggered,
-                    tavily_key,
+                    tavily_key, authority_authors,
                 ): c
                 for c in structured
             }
@@ -555,6 +639,7 @@ class CitationVerifier:
                 url_issues=url_issues,
                 url_type_triggered=url_type_triggered,
                 tavily_api_key=tavily_key,
+                authority_authors=authority_authors,
             )
             all_evidence.append(unit["trace"])
             if unit["kind"] == "VALID":
@@ -577,6 +662,7 @@ class CitationVerifier:
                 url_issues=url_issues,
                 url_type_triggered=url_type_triggered,
                 tavily_api_key=tavily_key,
+                authority_authors=authority_authors,
             )
             all_evidence.append(unit["trace"])
             if unit["kind"] == "VALID":
