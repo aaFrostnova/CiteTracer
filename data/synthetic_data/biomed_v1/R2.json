@@ -2440,5 +2440,32 @@
   "_query_venue": "Eur Heart J",
   "_query_year": 2020,
   "citation_id": "R2-0071"
+ },
+ {
+  "title": "Targeting PI3K/Akt signal transduction for cancer therapy",
+  "authors": [
+   "Yan He",
+   "Miao Miao Sun",
+   "Guo Geng Zhang",
+   "Jing Yang",
+   "K. Chen",
+   "Wen Wen Xu",
+   "Bin Li"
+  ],
+  "venue": "Signal transduction and targeted therapy",
+  "venue_iso": "Signal Transduct Target Ther",
+  "year": 2021,
+  "doi": "10.1038/s41392-021-00828-5",
+  "arxiv_id": "",
+  "url": "https://doi.org/10.1038/s41392-021-00828-5",
+  "volume": "6",
+  "pages": "425",
+  "publisher": "",
+  "location": "",
+  "_source": "europepmc",
+  "_query_topic": "stem cell therapy",
+  "_query_venue": "Signal Transduct Target Ther",
+  "_query_year": 2021,
+  "citation_id": "R2-0072"
  }
 ]

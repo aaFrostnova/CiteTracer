@@ -2027,10 +2027,6 @@
   "label": "POTENTIAL_HALLUCINATED",
   "subtype": "P1"
  },
- "P1-0035": {
-  "label": "POTENTIAL_HALLUCINATED",
-  "subtype": "P1"
- },
  "P1-0036": {
   "label": "POTENTIAL_HALLUCINATED",
   "subtype": "P1"
@@ -3998,5 +3994,9 @@
  "R3_plus-0068": {
   "label": "REAL",
   "subtype": "R3"
+ },
+ "R2-0072": {
+  "label": "REAL",
+  "subtype": "R2"
  }
 }

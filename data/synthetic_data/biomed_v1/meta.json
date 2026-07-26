@@ -26641,42 +26641,6 @@
    "_query_year": 2019
   }
  },
- "P1-0035": {
-  "subtype": "P1",
-  "label": "POTENTIAL_HALLUCINATED",
-  "category": "Author variant",
-  "mutation_type": "author_name_variant",
-  "changed_fields": [
-   "authors"
-  ],
-  "explanation": "Author name variant: \"Kui Sheng Chen\" → \"K. Chen\". Initial-only variant of a real author.",
-  "seed": {
-   "title": "Targeting PI3K/Akt signal transduction for cancer therapy",
-   "authors": [
-    "Yan He",
-    "Miao Miao Sun",
-    "Guo Geng Zhang",
-    "Jing Yang",
-    "K. Chen",
-    "Wen Wen Xu",
-    "Bin Li"
-   ],
-   "venue": "Signal transduction and targeted therapy",
-   "venue_iso": "Signal Transduct Target Ther",
-   "year": 2021,
-   "doi": "10.1038/s41392-021-00828-5",
-   "arxiv_id": "",
-   "url": "https://doi.org/10.1038/s41392-021-00828-5",
-   "volume": "6",
-   "pages": "425",
-   "publisher": "",
-   "location": "",
-   "_source": "europepmc",
-   "_query_topic": "stem cell therapy",
-   "_query_venue": "Signal Transduct Target Ther",
-   "_query_year": 2021
-  }
- },
  "P1-0036": {
   "subtype": "P1",
   "label": "POTENTIAL_HALLUCINATED",
@@ -47192,6 +47156,42 @@
    "_query_topic": "cancer immunotherapy",
    "_query_venue": "Signal Transduct Target Ther",
    "_query_year": 2022
+  }
+ },
+ "R2-0072": {
+  "subtype": "R2",
+  "label": "REAL",
+  "category": "Real",
+  "mutation_type": "format_variant",
+  "changed_fields": [
+   "authors"
+  ],
+  "explanation": "Format-only change: one author's given name abbreviated to a single initial ('Kui Sheng Chen' -> 'K. Chen'). A single-letter initial is a standard, confirmable abbreviation (R2 format variant), not an unverifiable name variant.",
+  "seed": {
+   "title": "Targeting PI3K/Akt signal transduction for cancer therapy",
+   "authors": [
+    "Yan He",
+    "Miao Miao Sun",
+    "Guo Geng Zhang",
+    "Jing Yang",
+    "K. Chen",
+    "Wen Wen Xu",
+    "Bin Li"
+   ],
+   "venue": "Signal transduction and targeted therapy",
+   "venue_iso": "Signal Transduct Target Ther",
+   "year": 2021,
+   "doi": "10.1038/s41392-021-00828-5",
+   "arxiv_id": "",
+   "url": "https://doi.org/10.1038/s41392-021-00828-5",
+   "volume": "6",
+   "pages": "425",
+   "publisher": "",
+   "location": "",
+   "_source": "europepmc",
+   "_query_topic": "stem cell therapy",
+   "_query_venue": "Signal Transduct Target Ther",
+   "_query_year": 2021
   }
  }
 }
