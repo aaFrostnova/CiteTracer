@@ -12,8 +12,7 @@ cases to class-specialist judge agents.
 
 ![CITETRACER overview](figs/overview.png)
 
-On a 2,450-citation synthetic benchmark CITETRACER attains 97.1% accuracy
-and class-level F1 of 97.0 / 95.8 / 98.5 for Real / Potential /
+On a 2,450-citation synthetic benchmark CITETRACER attains class-level F1 of 97.0 / 95.8 / 98.5 for Real / Potential /
 Hallucinated. On 957 real-world fabricated citations from ICLR 2026 and
 ACM CCS 2026 desk-rejected submissions it catches 97.1% with no
 abstentions. See [docs/taxonomy.md](docs/taxonomy.md) for the full
