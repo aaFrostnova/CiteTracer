@@ -997,8 +997,7 @@ Route by author discrepancy TYPE:
 [C] AUTHORS REORDERED (same set, different order, count matches):
     → hint="likely_hallucinated", issues=["author_reordered"]  (H2)
 
-Do NOT let plausible first-name variants (DBLP "0003" suffix, "L. Zhao" vs
-"Long Zhao", "Afouras T" vs "Triantafyllos Afouras") distract you from a
+Do NOT let plausible first-name variants (DBLP "0003" suffix, "Afouras T" vs "Triantafyllos Afouras") distract you from a
 count/set mismatch. If you see Citation.surnames ≠ Candidate.surnames as a
 set, or len(Citation.authors) ≠ len(Candidate.authors) without "et al.",
 return likely_hallucinated regardless of other minor name variations.
@@ -1270,7 +1269,7 @@ POTENTIAL_AGENT_PROMPT = """You are a citation discrepancy analyst. The citation
   same people, same order). Only the first-name form differs.
   Valid P1 examples: "Katherine" vs "Kate", "Mike" vs "Michael", "Wei Zhang" vs
   "William Zhang", "Nando" vs "Fernando", "Shu Yang" vs "Shuang Yang",
-  "Afouras T" vs "Triantafyllos Afouras", "L. Zhao" vs "Long Zhao".
+  "Afouras T" vs "Triantafyllos Afouras".
 - P2. Non-academic source unverifiable: Citation references a non-academic source
   whose existence cannot be fully verified through structured databases.
 - P3. Insufficient field evidence: Citation provides optional peripheral fields
